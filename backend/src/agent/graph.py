@@ -39,6 +39,9 @@ if os.getenv("GEMINI_API_KEY") is None:
 # Used for Google Search API
 genai_client = Client(api_key=os.getenv("GEMINI_API_KEY"))
 
+# Get base URL from environment variable
+GEMINI_BASE_URL = os.getenv("GEMINI_BASE_URL")
+
 
 # Nodes
 def generate_query(state: OverallState, config: RunnableConfig) -> QueryGenerationState:
@@ -66,6 +69,7 @@ def generate_query(state: OverallState, config: RunnableConfig) -> QueryGenerati
         temperature=1.0,
         max_retries=2,
         api_key=os.getenv("GEMINI_API_KEY"),
+        client_options={"api_endpoint": GEMINI_BASE_URL} if GEMINI_BASE_URL else None,
     )
     structured_llm = llm.with_structured_output(SearchQueryList)
 
@@ -168,6 +172,7 @@ def reflection(state: OverallState, config: RunnableConfig) -> ReflectionState:
         temperature=1.0,
         max_retries=2,
         api_key=os.getenv("GEMINI_API_KEY"),
+        client_options={"api_endpoint": GEMINI_BASE_URL} if GEMINI_BASE_URL else None,
     )
     result = llm.with_structured_output(Reflection).invoke(formatted_prompt)
 
@@ -247,6 +252,7 @@ def finalize_answer(state: OverallState, config: RunnableConfig):
         temperature=0,
         max_retries=2,
         api_key=os.getenv("GEMINI_API_KEY"),
+        client_options={"api_endpoint": GEMINI_BASE_URL} if GEMINI_BASE_URL else None,
     )
     result = llm.invoke(formatted_prompt)
 
