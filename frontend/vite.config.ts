@@ -13,10 +13,11 @@ export default defineConfig({
     },
   },
   server: {
+    host: '0.0.0.0',
     proxy: {
       // Proxy API requests to the backend server
       "/api": {
-        target: "http://192.168.8.53:8000", // Default backend address
+        target: "http://192.168.8.53:8123", // Default backend address
         changeOrigin: true,
         // Optionally rewrite path if needed (e.g., remove /api prefix if backend doesn't expect it)
         // rewrite: (path) => path.replace(/^\/api/, ''),
